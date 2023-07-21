@@ -44,10 +44,6 @@ class Home extends StatelessWidget {
           unselectedItemColor:darkGrey,
         ),
       ),
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: boldText(text: "Dashboard",color: fontGrey,size: 18.0),
-      ),
       body: Column(
         children: [
           Obx(()=> Expanded(child: navScreens.elementAt(homeController.navIndex.value)))
