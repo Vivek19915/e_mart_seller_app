@@ -1,3 +1,4 @@
+import 'package:e_mart_seller_app/splash_screen.dart';
 import 'package:e_mart_seller_app/views/auth_screen/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
 
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
           elevation: 0.0,
         ),
       ),
-      home: LoginScreen(),
+      home: SplashScreen(),
 
     );
   }
