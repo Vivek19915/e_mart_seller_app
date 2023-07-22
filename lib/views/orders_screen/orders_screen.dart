@@ -1,4 +1,7 @@
 import 'package:e_mart_seller_app/const/const.dart';
+import 'package:e_mart_seller_app/views/orders_screen/order_details.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../widgets/normal_text.dart';
 import 'package:intl/intl.dart' as intl;
@@ -24,7 +27,9 @@ class OrdersScreen extends StatelessWidget {
       body: Column(
         children: List.generate(20, (index) =>
             ListTile(
-              onTap: () {},
+              onTap: () {
+                Get.to(()=>OrderDetails());
+              },
               title: boldText (text: "12345678912331", color: purpleColor),
               subtitle: Column(
                 children: [

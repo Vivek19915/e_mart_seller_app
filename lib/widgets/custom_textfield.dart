@@ -31,3 +31,37 @@ Widget customTextField({label,hint,controller,icon , isDesc = false}){
     ),
   ).box.padding(EdgeInsets.all(8)).make();
 }
+
+
+
+
+
+Widget customTextField2({label,hint,controller,icon , isDesc = false}){
+  return TextFormField(
+    maxLines: isDesc?5:1,
+    style: TextStyle(color: Colors.white),
+
+    decoration: InputDecoration(
+
+      isDense: true,
+      label: normalText(text: label),
+      hintText: hint,
+
+      hintStyle: TextStyle(color: Colors.white),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.white),
+      ),
+
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: lightGrey),
+      ),
+
+    ),
+  ).box.padding(EdgeInsets.all(8)).make();
+}
