@@ -3,6 +3,7 @@ import 'package:e_mart_seller_app/widgets/normal_text.dart';
 
 Widget customTextField({label,hint,controller,icon , isDesc = false}){
   return TextFormField(
+    controller: controller,
     maxLines: isDesc?5:1,
     style: TextStyle(color: Colors.white),
 

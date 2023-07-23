@@ -3,6 +3,7 @@ import 'package:e_mart_seller_app/const/const.dart';
 import 'package:e_mart_seller_app/controllers/auth_controller.dart';
 import 'package:e_mart_seller_app/controllers/profile_controller.dart';
 import 'package:e_mart_seller_app/services/store_services.dart';
+import 'package:e_mart_seller_app/splash_screen.dart';
 import 'package:e_mart_seller_app/views/auth_screen/login_screen.dart';
 import 'package:e_mart_seller_app/views/messages_screen/messages_screen.dart';
 import 'package:e_mart_seller_app/views/profile_screen/edit_profile_screen.dart';
@@ -29,11 +30,13 @@ class ProfileScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: boldText(text: settings,size: 20.0),
         actions: [
-          IconButton(onPressed: (){Get.to(()=>EditProfileScreen());}, icon: Icon(Icons.edit)),
+          IconButton(onPressed: (){Get.to(()=>EditProfileScreen(
+            username: profileController.snapshotData['vendor_name'],
+          ));}, icon: Icon(Icons.edit)),
           TextButton(onPressed: () async {
 
             await Get.find<AuthController>().signoutMethod(context);
-            Get.offAll(()=>LoginScreen());
+            Get.offAll(()=>SplashScreen());
             } , child: normalText(text: "Logout" ,size: 18.0))
         ],
       ),
@@ -54,7 +57,7 @@ class ProfileScreen extends StatelessWidget {
             return Column(
               children: [
                 ListTile(
-                  leading: Image.asset(imgProduct).box.roundedFull.clip(Clip.antiAlias).make(),
+                  leading: Image.network(profileController.snapshotData['imageUrl'],width:100,fit: BoxFit.fitHeight,).box.roundedFull.clip(Clip.antiAlias).make(),
                   title: boldText(text:"${data['vendor_name']}"),
                   subtitle: normalText(text: data['email'].toString()),
                 ),

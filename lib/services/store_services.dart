@@ -6,7 +6,9 @@ class StoreServices{
     return firestore.collection(vendorsCollection).where('id',isEqualTo: currentUser!.uid).get();
   }
   
-
+  static getMessages(uid){
+    return firestore.collection(chatsCollection).where('toId',isEqualTo: uid).snapshots();
+  }
 
 
 }

@@ -20,6 +20,15 @@ class ProfileController extends GetxController{
   var newpassController = TextEditingController();
   var oldpassController = TextEditingController();
 
+
+  //shop setting controller
+  var shopnameController = TextEditingController();
+  var shopAddressController = TextEditingController();
+  var shopMobileController = TextEditingController();
+  var shopWebsiteController = TextEditingController();
+  var shopDescController = TextEditingController();
+
+
   // so that we can use it as global for this class
   var profileImageLink = '';
 
@@ -67,6 +76,21 @@ class ProfileController extends GetxController{
         .then((value){
       currentUser!.updatePassword(newpass);
     }).catchError((error){debugPrint(error.toString());});       //catch error if some error occur then print it
+  }
+
+
+
+
+  updateShopDetails({shopname , shopaddress  , shopmobile , shopwebsite , shopdesc})async{
+    var store  = firestore.collection(vendorsCollection).doc(currentUser!.uid);
+    await store.set({
+      'shop_name' : shopname,
+      'shop_address' : shopaddress,
+      'shop_mobile' : shopmobile,
+      'shop_website' : shopwebsite,
+      'shop_description' : shopdesc,
+    },SetOptions(merge: true));
+    isloading(false);
   }
 
 

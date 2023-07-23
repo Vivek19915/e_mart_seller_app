@@ -1,5 +1,6 @@
 import 'package:e_mart_seller_app/const/const.dart';
 import 'package:e_mart_seller_app/controllers/auth_controller.dart';
+import 'package:e_mart_seller_app/views/auth_screen/signup_screen.dart';
 import 'package:e_mart_seller_app/views/home_screen/home.dart';
 import 'package:e_mart_seller_app/widgets/loading_indicator.dart';
 import 'package:e_mart_seller_app/widgets/normal_text.dart';
@@ -57,7 +58,9 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 10.heightBox,
-                Align(alignment:Alignment.centerRight,child: TextButton(onPressed: (){}, child: normalText(text: forgotPassword,color: purpleColor))),
+                Align(alignment:Alignment.centerRight,child: TextButton(onPressed: (){
+                  Get.to(()=>SignupScreen());
+                }, child: normalText(text: "Sign In",color: purpleColor))),
                 20.heightBox,
                 Obx(
                     ()=> authController.isloading.value ? Center(child: loadingIndicator(),)
