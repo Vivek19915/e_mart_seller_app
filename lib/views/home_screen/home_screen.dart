@@ -42,6 +42,13 @@ class HomeScreen extends StatelessWidget {
             var data = snapshot.data!.docs;
             data = data.sortedBy((a, b) => b['p_wishlist'].length.compareTo(a['p_wishlist'].length));  //sorted on the basis of length of b>a
 
+            //adding rating of the user on home screen ========>>>>>>>>>
+            var totalrating = 0.0;
+            for(int i = 0 ; i<data.length;i++){
+              totalrating  = totalrating + double.parse(data[i]['p_rating']);
+            }
+            totalrating = totalrating/data.length;
+
 
             return SingleChildScrollView(
               child: Column(
@@ -51,14 +58,14 @@ class HomeScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       dashboardButton(context,title: products,count: data.length.toString(),icon: icProducts),
-                      dashboardButton(context,title: orders,count: homeController.count,icon: icOrders),
+                      dashboardButton(context,title: orders,count: homeController.count.toString(),icon: icOrders),
                     ],
                   ),
                   10.heightBox,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      dashboardButton(context,title: rating,count: 75,icon: icStar),
+                      dashboardButton(context,title: rating,count: totalrating,icon: icStar),
                       dashboardButton(context,title: totalSales,count: 50,icon: icOrders),
                     ],
                   ),
