@@ -14,7 +14,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    var homeController = Get.put(HomeCotroller());
+    var homeController = Get.put(HomeController());
 
     var navScreens = [
       HomeScreen(),

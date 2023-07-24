@@ -44,7 +44,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
             return loadingIndicator().box.makeCentered();
           }
           else if(snapshot.data!.docs.isEmpty){
-            return normalText(text: "No Orders Yet!");
+            return normalText(text: "No Orders Yet!",color: purpleColor).box.makeCentered();
           }
           else {
 

@@ -39,6 +39,7 @@ Widget customTextField({label,hint,controller,icon , isDesc = false}){
 
 Widget customTextField2({label,hint,controller,icon , isDesc = false}){
   return TextFormField(
+    controller: controller,
     maxLines: isDesc?5:1,
     style: TextStyle(color: Colors.white),
 

@@ -77,14 +77,45 @@ class ProductsScreen extends StatelessWidget {
                                 child: Icon(Icons.more_vert_rounded),
                                 menuBuilder: ()
                                 => Column(
-                                  children: List.generate(popupMenuIcons.length, (index) {
+                                  children: List.generate(popupMenuIcons.length, (i) {
                                     return Row(
                                       children: [
-                                        Icon(popupMenuIcons[index],color: purpleColor,),
+
+
+                                        //show showing featured button green ----->
+                                        Icon(
+                                          popupMenuIcons[i],
+                                          color: data[index]['featured_id'] == currentUser!.uid && i==0 ? green  : purpleColor,),
                                         10.widthBox,
-                                        normalText(text: popupMenuTitles[index],color: purpleColor)
+                                        normalText(text:data[index]['featured_id'] == currentUser!.uid && i==0 ?"Remove Featured" : popupMenuTitles[i],color: purpleColor)
                                       ],
-                                    ).paddingAll(10).onTap(() {});
+                                    ).paddingAll(10).onTap(() {
+
+                                      //When user click on featured
+                                      if(i==0 ){
+                                        if(data[index]['p_featured'] == true ){
+                                          //means user product already featured and user wnats to remove it thats why he click
+                                          productCOntroller.removeFeatured(data[index].id);
+                                          VxToast.show(context, msg: "Product Removed From Featured");
+                                        }
+                                        else{
+                                          productCOntroller.addFeatured(data[index].id);
+                                          VxToast.show(context, msg: "Product Added to Featured");
+                                        }
+                                      }
+
+                                      //When user click on edit
+                                      if(i==1){
+
+                                      }
+
+                                      //when user click on remove
+                                      if(i==2){
+                                        productCOntroller.removeProduct(data[index].id);
+                                        VxToast.show(context, msg: "Product Removed");
+                                      }
+
+                                    });
                                   }),
                                 ).box.color(Colors.white).roundedSM.width(200).padding(EdgeInsets.all(10)).make(),
                                 clickType: VxClickType.singleClick,

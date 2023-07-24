@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_mart_seller_app/const/const.dart';
+import 'package:e_mart_seller_app/controllers/home_controllers.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -10,6 +12,12 @@ import 'package:path/path.dart';
 import '../models/category_model.dart';
 
 class ProductsController extends GetxController{
+
+
+  late dynamic productsnapshot;
+
+
+  var isloading = false.obs;
 
   //text editing controller;
   var pnameController = TextEditingController();
@@ -21,8 +29,8 @@ class ProductsController extends GetxController{
   var categoryList = <String>[].obs;
   var subcategoryList = <String>[].obs;
   List<Category> category = [];            //list of category model ----->>>>>>
-  var pImagesList = List<dynamic>.generate(3, (index) => null).obs;
-  var pImagesLinks = [].obs;
+  var pImagesList = RxList<dynamic>.generate(3, (index) => null);
+  var pImagesLinks = [];
 
   //variable
   var categoryvalue= ''.obs;
@@ -93,12 +101,56 @@ class ProductsController extends GetxController{
 
 
 
-  uploadProductDetails()async{
+
+
+  uploadProductDetails(context)async {
     var store = firestore.collection(productsCollection).doc();
     await store.set({
-
-
+      'p_featured': false,
+      'p_category':categoryvalue.value,
+      'p_colors': FieldValue.arrayUnion([Colors.red.value,Colors.black.value,Colors.white.value]),
+      'p_desc': pdescController.text.toString(),
+      'p_imgs': FieldValue.arrayUnion(pImagesLinks),
+      'p_name': pnameController.text.toString(),
+      'p_price':ppriceController.text.toString(),
+      'p_quantity':pquantityController.text.toString(),
+      'p_rating':"5.0",
+      'p_seller':Get.find<HomeController>().username,
+      'p_subcategory':subcategoryvalue.value,
+      'p_wishlist':FieldValue.arrayUnion([]),
+      'vendor_id':currentUser!.uid,
+      'featured_id':''
     });
+
+    VxToast.show(context, msg: "Product Uploaded");
   }
+
+
+  //add or remove product from featured product
+
+  addFeatured(docId)async{
+    await firestore.collection(productsCollection).doc(docId).set({
+      'featured_id': currentUser!.uid,
+      'p_featured': true
+    },SetOptions(merge: true));
+  }
+
+
+  removeFeatured(docId)async{
+    await firestore.collection(productsCollection).doc(docId).set({
+      'featured_id': '',
+      'p_featured': false
+    },SetOptions(merge: true));
+  }
+
+
+
+
+  //to remove product from firebase
+  removeProduct(docId)async{
+    await firestore.collection(productsCollection).doc(docId).delete();
+  }
+
+
 
 }

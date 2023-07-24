@@ -13,6 +13,16 @@ class ProductDetails extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: boldText(text: data['p_name'].toString(),color: fontGrey,size: 16.0),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.favorite,color: red,),
+              boldText(text: data['p_wishlist'].length.toString(), color: fontGrey),
+
+            ],
+          ).box.width(50).make(),
+        ],
       ),
 
 

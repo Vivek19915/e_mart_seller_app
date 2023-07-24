@@ -20,4 +20,10 @@ class StoreServices{
     return firestore.collection(productsCollection).where('vendor_id',isEqualTo: currentUser!.uid).snapshots();   //arrayContains--> since vendors is list of ids
   }
 
+
+  static getPopularProducts(){
+    //so whatever product have more value wishlist will be the popular product ---> as more suer like that product
+    return firestore.collection(productsCollection).where('vendor_id',isEqualTo: currentUser!.uid).orderBy('p_wishlist'.length);
+  }
+
 }
