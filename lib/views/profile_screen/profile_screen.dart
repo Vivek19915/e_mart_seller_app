@@ -57,7 +57,8 @@ class ProfileScreen extends StatelessWidget {
             return Column(
               children: [
                 ListTile(
-                  leading: Image.network(profileController.snapshotData['imageUrl'],width:100,fit: BoxFit.fitHeight,).box.roundedFull.clip(Clip.antiAlias).make(),
+                  leading: data['imageUrl'] == null ?  Image.network(profileController.snapshotData['imageUrl'],width:100,fit: BoxFit.fitHeight,).box.roundedFull.clip(Clip.antiAlias).make()
+                      : Image.asset(imgProduct,width: 100,fit: BoxFit.cover,).box.roundedFull.clip(Clip.antiAlias).make(),
                   title: boldText(text:"${data['vendor_name']}"),
                   subtitle: normalText(text: data['email'].toString()),
                 ),

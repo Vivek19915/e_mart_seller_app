@@ -14,6 +14,12 @@ class ShopSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     var profileController = Get.find<ProfileController>();
+    //assigning pre values ---->>>>
+    profileController.shopnameController.text = profileController.snapshotData['shop_name'].toString();
+    profileController.shopAddressController.text = profileController.snapshotData['shop_address'].toString();
+    profileController.shopMobileController.text = profileController.snapshotData['shop_mobile'].toString();
+    profileController.shopWebsiteController.text = profileController.snapshotData['shop_website'].toString();
+    profileController.shopDescController.text = profileController.snapshotData['shop_description'].toString();
 
     return Scaffold(
       backgroundColor: purpleColor,

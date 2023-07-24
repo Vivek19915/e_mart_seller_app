@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:e_mart_seller_app/const/const.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 
 import '../models/category_model.dart';
 
@@ -20,6 +22,7 @@ class ProductsController extends GetxController{
   var subcategoryList = <String>[].obs;
   List<Category> category = [];            //list of category model ----->>>>>>
   var pImagesList = List<dynamic>.generate(3, (index) => null).obs;
+  var pImagesLinks = [].obs;
 
   //variable
   var categoryvalue= ''.obs;
@@ -66,6 +69,36 @@ class ProductsController extends GetxController{
     catch(e){
       VxToast.show(context, msg: e.toString());
     }
+  }
+
+
+
+
+  ///to upload 3 products images
+  uploadProductImages()async{
+    pImagesLinks.clear();
+    for(var item in pImagesList){
+      if(item != null){
+        var filename  = basename(item.path);
+        var destination  = 'images/vendors/${currentUser!.uid}/$filename';
+        Reference ref = FirebaseStorage.instance.ref().child(destination);
+        await ref.putFile(item);
+        var n = await ref.getDownloadURL();
+        pImagesLinks.add(n);
+      }
+    }
+  }
+
+
+
+
+
+  uploadProductDetails()async{
+    var store = firestore.collection(productsCollection).doc();
+    await store.set({
+
+
+    });
   }
 
 }

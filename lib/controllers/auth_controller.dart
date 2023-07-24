@@ -54,6 +54,11 @@ class AuthController extends GetxController{
       'email' : email,
       'imageUrl' : '',
       'id' : currentUser!.uid,
+      'shop_name' : 'null',
+      'shop_address' : 'null',
+      'shop_mobile' : 'null',
+      'shop_website' : 'null',
+      'shop_description' : 'null',
     });
   }
 
