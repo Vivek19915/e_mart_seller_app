@@ -26,4 +26,12 @@ class StoreServices{
     return firestore.collection(productsCollection).where('vendor_id',isEqualTo: currentUser!.uid).orderBy('p_wishlist'.length);
   }
 
+
+
+  //get all chat messages
+  static getChatMessages(docId) {
+    //print msg by sorting on created on filed
+    return firestore.collection(chatsCollection).doc(docId).collection(messagesCollection).orderBy('created_on',descending: false).snapshots();
+  }
+
 }

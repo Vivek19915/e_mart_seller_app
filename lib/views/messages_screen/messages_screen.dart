@@ -43,7 +43,7 @@ class MessagesScreen extends StatelessWidget {
 
                     return ListTile(
                       onTap: (){
-                        Get.to(()=>ChatScreen());
+                        Get.to(()=>ChatScreen(),arguments: [data[index]['seller_name'],data[index]['fromId']]);
                       },
                       leading: CircleAvatar(backgroundColor:Colors.white,child: Icon(Icons.person,color: purpleColor,)),
                       title: boldText(text: data[index]['sender_name']),
