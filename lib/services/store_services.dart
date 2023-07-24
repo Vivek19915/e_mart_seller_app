@@ -16,4 +16,8 @@ class StoreServices{
   }
 
 
+  static getProducts(){
+    return firestore.collection(productsCollection).where('vendor_id',isEqualTo: currentUser!.uid).snapshots();   //arrayContains--> since vendors is list of ids
+  }
+
 }

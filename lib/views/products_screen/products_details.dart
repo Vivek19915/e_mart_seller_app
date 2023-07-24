@@ -4,14 +4,15 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/utils.dart';
 
 class ProductDetails extends StatelessWidget {
-  const ProductDetails({super.key});
+  final dynamic data;
+  const ProductDetails({super.key, this.data});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: boldText(text: "Product Title",color: fontGrey,size: 16.0),
+        title: boldText(text: data['p_name'].toString(),color: fontGrey,size: 16.0),
       ),
 
 
@@ -28,9 +29,9 @@ class ProductDetails extends StatelessWidget {
                 height: 350,
                 viewportFraction: 1.0,
                 autoPlayCurve: Curves.fastOutSlowIn,
-                itemCount: 5,
+                itemCount: data['p_imgs'].length,
                 itemBuilder: (context,index){
-                  return Image.asset(imgProduct,width: double.infinity,fit: BoxFit.cover).box.padding(EdgeInsets.symmetric(horizontal: 10)).make();
+                  return Image.network(data['p_imgs'][index],width: double.infinity,fit: BoxFit.cover).box.rounded.clip(Clip.antiAlias).margin(EdgeInsets.symmetric(horizontal: 10)).make();
                 }
             ),
 
@@ -43,12 +44,12 @@ class ProductDetails extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 10.heightBox,
-                "Product Title".toString().text.size(16).color(purpleColor).semiBold.make(),
+                data['p_name'].toString().text.size(16).color(purpleColor).semiBold.make(),
                 Row(
                   children: [
-                    boldText(text: "Category",color: fontGrey,size: 16.0),
+                    boldText(text: data['p_category'],color: fontGrey,size: 16.0),
                     10.widthBox,
-                    normalText(text: "SubCategory",color: fontGrey,size: 16.0),
+                    normalText(text: data['p_subcategory'],color: fontGrey,size: 16.0),
                   ],
                 ),
 
@@ -56,7 +57,7 @@ class ProductDetails extends StatelessWidget {
                 10.heightBox,
                 VxRating(
                   isSelectable: false,   //so that rating wont change
-                  value: double.parse("4.0"),
+                  value: double.parse(data['p_rating']),
                   onRatingUpdate: (value){},
                   normalColor: textfieldGrey,
                   selectionColor: golden,
@@ -68,7 +69,7 @@ class ProductDetails extends StatelessWidget {
 
                 //price
                 10.heightBox,
-                "1000".numCurrency.toString().text.color(red).bold.size(18).make(),
+                data['p_price'].toString().numCurrency.toString().text.color(red).bold.size(18).make(),
 
 
 
@@ -89,8 +90,8 @@ class ProductDetails extends StatelessWidget {
 
                         //color row  ----->>>>>
                          Row(
-                          children: List.generate(3,
-                                (index) => VxBox().size(40, 40).roundedFull.color(Vx.randomPrimaryColor).margin(EdgeInsets.symmetric(horizontal: 4)).make()
+                          children: List.generate(data['p_colors'].length,
+                                (index) => VxBox().size(40, 40).roundedFull.color(Color(data['p_colors'][index])).margin(EdgeInsets.symmetric(horizontal: 4)).make()
                                     .onTap(() {}),
                           ),
                         ).scrollHorizontal().expand(),
@@ -103,7 +104,7 @@ class ProductDetails extends StatelessWidget {
                     Row(
                       children: [
                         boldText(text: "Quantity :",color: fontGrey,size: 22.0).box.width(150).make(),
-                        normalText(text: "20 items",color: fontGrey,size: 22.0)
+                        normalText(text: data['p_quantity'].toString() + " items",color: fontGrey,size: 22.0)
                       ]
                     ).paddingSymmetric(horizontal: 10),
 
@@ -114,14 +115,8 @@ class ProductDetails extends StatelessWidget {
                     Align(alignment:Alignment.centerLeft, child: boldText(text: "Description" , color: fontGrey)),
                     10.heightBox,
                     Text(
-                      "Descritio of product ".toString(),
+                      data['p_desc'].toString(),
                     ),
-
-
-
-
-
-
 
 
                   ],

@@ -9,3 +9,6 @@ const popupMenuIcons = [Icons.featured_play_list, Icons.edit, Icons.delete];
 
 const profileButtonsTitles = ['Shop Settings','Messages'];
 const profileButtonsIcons= [Icons.settings, Icons.chat];
+
+
+const colorList= [Colors.white,Colors.yellow,Colors.orange,Colors.red,Colors.lightGreen,Colors.green,Colors.lightBlue,Colors.blue,Colors.purple,Colors.brown,Colors.grey,Colors.black,];

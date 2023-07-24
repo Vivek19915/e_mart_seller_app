@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_mart_seller_app/const/const.dart';
+import 'package:e_mart_seller_app/controllers/products_controller.dart';
+import 'package:e_mart_seller_app/services/store_services.dart';
 import 'package:e_mart_seller_app/views/products_screen/add_new_product.dart';
 import 'package:e_mart_seller_app/views/products_screen/products_details.dart';
+import 'package:e_mart_seller_app/widgets/loading_indicator.dart';
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/utils.dart';
 import 'package:intl/intl.dart' as intl;
@@ -11,6 +16,9 @@ class ProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var productCOntroller = Get.put(ProductsController());
+
     return Scaffold(
       backgroundColor: Colors.white,
 
@@ -25,47 +33,77 @@ class ProductsScreen extends StatelessWidget {
       ),
 
 
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-              child: Column(
-                children: List.generate(20, (index) =>
-                ListTile(
-                  onTap: () { Get.to(()=>ProductDetails());},
-                  leading: Image.asset(imgProduct, width: 100, height: 100, fit: BoxFit.cover),
-                  title: boldText (text: "Product title", color: fontGrey),
-                  subtitle: Row(
-                    children: [
-                      normalText(text: "\$40.0", color: darkGrey),
-                      10.widthBox,
-                      boldText(text: "Featured" ,color: green)
-                    ],
-                  ),
-                  trailing: VxPopupMenu(
-                    child: Icon(Icons.more_vert_rounded),
-                    menuBuilder: ()
-                       => Column(
-                        children: List.generate(popupMenuIcons.length, (index) {
-                          return Row(
-                            children: [
-                              Icon(popupMenuIcons[index],color: purpleColor,),
-                              10.widthBox,
-                              normalText(text: popupMenuTitles[index],color: purpleColor)
-                            ],
-                          ).paddingAll(10).onTap(() {});
-                        }),
-                      ).box.color(Colors.white).roundedSM.width(200).padding(EdgeInsets.all(10)).make(),
-                    clickType: VxClickType.singleClick,
 
-                  )
-                  ),
-        ),
-      ))),
+      body: StreamBuilder(
+        stream: StoreServices.getProducts(),
+        builder: (BuildContext context , AsyncSnapshot<QuerySnapshot>snapshot){
+          if(snapshot.hasData == false){
+            return Center(child: loadingIndicator(color: purpleColor),);
+          }
+          else if(snapshot.data!.docs.isEmpty){
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                "No Products yet!!".text.color(purpleColor).bold.makeCentered(),
+                10.heightBox,
+                "Add new Products!!".text.color(purpleColor).bold.makeCentered(),
 
-        //to add more products--->>
+              ],
+            );
+          }
+          else {
+
+            var data = snapshot.data!.docs;
+
+            return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Column(
+                      children: List.generate(data.length, (index) =>
+                          ListTile(
+                              onTap: () { Get.to(()=>ProductDetails(data: data[index]));},
+                              leading: Image.network(data[index]['p_imgs'][0], width: 100, height: 100, fit: BoxFit.cover).box.roundedSM.clip(Clip.antiAlias).make(),
+                              title: boldText (text: data[index]['p_name'].toString(), color: fontGrey),
+                              subtitle: Row(
+                                children: [
+                                  normalText(text: data[index]['p_price'].toString().numCurrency, color: darkGrey),
+                                  10.widthBox,
+                                  //featured product or not----->
+                                  data[index]['p_featured'] ? boldText(text: "Featured" ,color: green):Container(),
+                                ],
+                              ),
+                              trailing: VxPopupMenu(
+                                child: Icon(Icons.more_vert_rounded),
+                                menuBuilder: ()
+                                => Column(
+                                  children: List.generate(popupMenuIcons.length, (index) {
+                                    return Row(
+                                      children: [
+                                        Icon(popupMenuIcons[index],color: purpleColor,),
+                                        10.widthBox,
+                                        normalText(text: popupMenuTitles[index],color: purpleColor)
+                                      ],
+                                    ).paddingAll(10).onTap(() {});
+                                  }),
+                                ).box.color(Colors.white).roundedSM.width(200).padding(EdgeInsets.all(10)).make(),
+                                clickType: VxClickType.singleClick,
+
+                              )
+                          ),
+                      ),
+                    )));
+          }
+        },
+      ),
+
+
+        // to add more products--->>
         floatingActionButton: FloatingActionButton(
-          onPressed: (){
+          onPressed: ()async{
+            await productCOntroller.getCategories();
+            productCOntroller.populateCategoryList();
+
             Get.to(()=>AddNewProduct());
           },
           child: Icon(Icons.add,color: Colors.white,),
