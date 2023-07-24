@@ -1,4 +1,5 @@
 import 'package:e_mart_seller_app/const/const.dart';
+import 'package:e_mart_seller_app/services/store_services.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController{
@@ -8,11 +9,13 @@ class HomeController extends GetxController{
   void onInit() {
     super.onInit();
     getUsername();
+    getOrdersCount();
   }
 
   var navIndex = 0.obs;
 
   var username = '';
+  var count = 0;
 
   getUsername()async{
     var n = await firestore.collection(vendorsCollection).where('id',isEqualTo: currentUser!.uid).get().then((value) {
@@ -23,5 +26,11 @@ class HomeController extends GetxController{
 
     username = n;
     print(username);
+  }
+
+
+
+  getOrdersCount() async {
+     count = await firestore.collection(ordersCollection).where('vendors',arrayContains: currentUser!.uid).snapshots().length;
   }
 }

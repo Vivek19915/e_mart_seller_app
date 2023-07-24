@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_mart_seller_app/const/const.dart';
+import 'package:e_mart_seller_app/controllers/home_controllers.dart';
 import 'package:e_mart_seller_app/services/store_services.dart';
 import 'package:e_mart_seller_app/views/products_screen/products_details.dart';
 import 'package:e_mart_seller_app/widgets/loading_indicator.dart';
@@ -15,6 +16,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var homeController  = Get.find<HomeController>();
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -47,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       dashboardButton(context,title: products,count: data.length.toString(),icon: icProducts),
-                      dashboardButton(context,title: orders,count: 50,icon: icOrders),
+                      dashboardButton(context,title: orders,count: homeController.count,icon: icOrders),
                     ],
                   ),
                   10.heightBox,
