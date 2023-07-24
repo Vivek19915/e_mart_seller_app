@@ -65,7 +65,8 @@ class HomeScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      dashboardButton(context,title: rating,count: totalrating,icon: icStar),
+                      //fixed decimal points in flutter -------->
+                      dashboardButton(context,title: rating,count: totalrating.toStringAsFixed(2),icon: icStar),
                       dashboardButton(context,title: totalSales,count: 50,icon: icOrders),
                     ],
                   ),
@@ -91,6 +92,7 @@ class HomeScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Icon(Icons.favorite,color: red,),
+                            // ---> showig wishlist count
                             boldText(text: data[index]['p_wishlist'].length.toString(), color: fontGrey),
                           ],
                         ).box.width(50).make(),
