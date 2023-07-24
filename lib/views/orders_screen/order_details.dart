@@ -1,85 +1,133 @@
 import 'package:e_mart_seller_app/const/const.dart';
+import 'package:e_mart_seller_app/controllers/orders_controller.dart';
 import 'package:e_mart_seller_app/widgets/our_button.dart';
-
+import 'package:get/get.dart';
+import 'package:intl/intl.dart' as intl;
 import '../../widgets/normal_text.dart';
 import 'components/order_placed.dart';
 
-class OrderDetails extends StatelessWidget {
-  const OrderDetails({super.key});
+class OrderDetails extends StatefulWidget {
+
+  final dynamic data;
+
+  const OrderDetails({super.key, this.data});
+
+  @override
+  State<OrderDetails> createState() => _OrderDetailsState();
+}
+
+class _OrderDetailsState extends State<OrderDetails> {
+
+  var ordersController = Get.find<OrdersController>();
+
+  @override
+  void initState() {
+    ordersController.getOrders(widget.data);
+    ordersController.getOrdersTotalAmount(widget.data);
+    //setting values of order-status from database
+    ordersController.confirmed.value = widget.data['order_confirmed'];
+    ordersController.onDelievery.value = widget.data['order_on_delivery'];
+    ordersController.delievered.value = widget.data['order_delivered'];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        title: boldText(text: "Orders Details",color: fontGrey,size: 18.0),
-      ),
+    return Obx(
+      ()=>Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          automaticallyImplyLeading: false,
+          title: boldText(text: "Orders Details",color: fontGrey,size: 18.0),
+        ),
 
 
-      bottomNavigationBar: SizedBox(
-        height: 60,
-        width: context.screenWidth,
-        child: ourButton(color: green , onPress: (){} , title: 'Confirm Order'),
-      ),
+        bottomNavigationBar: Visibility(
+          visible: !ordersController.confirmed.value,
+          child: SizedBox(
+            height: 60,
+            width: context.screenWidth,
+            child: ourButton(color: green ,
+              onPress: (){
+                ordersController.confirmed.value = true;
+                ordersController.changeOrderStatus(title: "order_confirmed" , status: true, docId: widget.data.id);
+            } , title: 'Confirm Order'),
+          ),
+        ),
 
 
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-
-
-        child: Column(
-          children: [
-            Visibility(
-              child: Column(
+        body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              Column(
                 children: [
                   20.heightBox,
 
                   //order delivery section
-                  Column(
-                    children: [
-                      boldText(text: "Order Status" ,color: purpleColor,size: 16.0),
+                  Obx(
+                    ()=> Visibility(
+                      visible: ordersController.confirmed.value,
+                      child: Column(
+                        children: [
+                          boldText(text: "Order Status" ,color: purpleColor,size: 16.0),
 
-                      SwitchListTile(
-                          value: true,                    //value for on and off of witch
-                          onChanged: (value){},
-                          title: boldText(text: "Placed",color: purpleColor),
-                          activeColor: Colors.green,
-                      ),
-                      SwitchListTile(
-                        value: true,                    //value for on and off of witch
-                        onChanged: (value){},
-                        title: boldText(text: "Confirm",color: purpleColor),
-                        activeColor: Colors.green,
-                      ),
-                      SwitchListTile(
-                        value: false,                    //value for on and off of witch
-                        onChanged: (value){},
-                        title: boldText(text: "On Delievery",color: purpleColor),
-                        activeColor: Colors.green,
-                      ),
-                      SwitchListTile(
-                        value: false,                    //value for on and off of witch
-                        onChanged: (value){},
-                        title: boldText(text: "Delievered",color: purpleColor),
-                        activeColor: Colors.green,
-                      )
+                          SwitchListTile(
+                              value: true,                    //value for on and off of witch
+                              onChanged: (value){},
+                              title: boldText(text: "Placed",color: purpleColor),
+                              activeColor: Colors.green,
+                          ),
+                          SwitchListTile(
+                            value: ordersController.confirmed.value,                    //value for on and off of witch
+                            onChanged: (choosen_value){
+                              ordersController.confirmed.value = choosen_value;
+                              ordersController.changeOrderStatus(title: "order_confirmed" , status: choosen_value, docId: widget.data.id);
+                            },
+                            title: boldText(text: "Confirmed",color: purpleColor),
+                            activeColor: Colors.green,
+                          ),
+                          SwitchListTile(
+                            value: ordersController.onDelievery.value,                    //value for on and off of witch
+                            onChanged: (choosen_value){
+                              ordersController.onDelievery.value = choosen_value;
+                              ordersController.changeOrderStatus(title: "order_on_delivery" , status: choosen_value, docId: widget.data.id);
+                            },
+                            title: boldText(text: "On Delievery",color: purpleColor),
+                            activeColor: Colors.green,
+                          ),
+                          SwitchListTile(
+                            value: ordersController.delievered.value,                    //value for on and off of witch
+                            onChanged: (choosen_value){
+                              ordersController.delievered.value = choosen_value;
+                              ordersController.changeOrderStatus(title: "order_delivered" , status: choosen_value, docId: widget.data.id);
+                            },
+                            title: boldText(text: "Delievered",color: purpleColor),
+                            activeColor: Colors.green,
+                          )
 
 
-                    ],
-                  ).box.color(lightGrey).margin(EdgeInsets.symmetric(horizontal: 15)).padding(EdgeInsets.symmetric(vertical: 10)).shadowSm.roundedSM.make(),
+                        ],
+                      ).box.color(lightGrey).margin(EdgeInsets.symmetric(horizontal: 15)).padding(EdgeInsets.symmetric(vertical: 10)).shadowSm.roundedSM.make(),
+                    ),
+                  ),
 
 
                   20.heightBox,
                   //orders details section ------->>>>>>
                   Column(
                     children: [
-                      orderPlaceDetails(title1: "Order No",title2: "Shipping Method",d1:"data['order_code']",d2:"data['shipping_method']"),
+                      orderPlaceDetails(
+                          title1: "Order Code",
+                          title2: "Shipping Method",
+                          d1: widget.data['order_code'].toString(),
+                          d2:widget.data['shipping_method'].toString(),
+                      ),
                       orderPlaceDetails(
                           title1: "Order Date",
                           title2: "Payment Method",
-                          d1: "ASDASDASDAD",
-                          d2: "data['payment_method']"
+                          d1: intl.DateFormat().add_yMd().format((widget.data['order_date'].toDate())),
+                          d2: widget.data['payment_method'].toString(),
                       ),
                       orderPlaceDetails(
                           title1: "Payment Status",
@@ -99,20 +147,20 @@ class OrderDetails extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               boldText(text: "Shipping Address" , color: purpleColor),
-                              "data['order_by_name']".text.make(),
-                              "data['order_by_email']".text.make(),
-                              "data['order_by_address']".text.make(),
-                              "data['order_by_city']".text.make(),
-                              "data['order_by_state']".text.make(),
-                              "data['order_by_phone']".text.make(),
-                              "data['order_by_postalcode']".text.make(),
+                              widget.data['order_by_name'].toString().text.make(),
+                              widget.data['order_by_email'].toString().text.make(),
+                              widget.data['order_by_address'].toString().text.make(),
+                              widget.data['order_by_city'].toString().text.make(),
+                              widget.data['order_by_state'].toString().text.make(),
+                              widget.data['order_by_phone'].toString().text.make(),
+                              widget.data['order_by_postalcode'].toString().text.make(),
                             ],
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               boldText(text: "Total Amount",color: purpleColor),
-                              boldText(text: 3000.numCurrency , color: red),
+                              boldText(text: ordersController.total_amount.toString().numCurrency , color: red),
                             ],
                           )
                         ],
@@ -128,17 +176,17 @@ class OrderDetails extends StatelessWidget {
                   ListView(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    children: List.generate(4, (index) {
+                    children: List.generate(ordersController.ordersLIst.length, (index) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           orderPlaceDetails(
-                              title1: "Order title",
-                              title2: "Order total price",
-                              d1: "{order quantity",
+                              title1: ordersController.ordersLIst[index]['title'].toString(),
+                              title2: ordersController.ordersLIst[index]['total_price'].toString().numCurrency,
+                              d1: ordersController.ordersLIst[index]['quantity'].toString(),
                               d2: "Refundable"
                           ),
-                          VxBox().color(purpleColor).size(20, 20).margin(EdgeInsets.symmetric(horizontal: 10)).roundedFull.make(),
+                          VxBox().color(Color(ordersController.ordersLIst[index]['color'])).size(20, 20).margin(EdgeInsets.symmetric(horizontal: 10)).roundedFull.make(),
                           Divider()
                         ],
                       );
@@ -152,9 +200,9 @@ class OrderDetails extends StatelessWidget {
 
 
                 ],
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

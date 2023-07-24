@@ -11,4 +11,9 @@ class StoreServices{
   }
 
 
+  static getOrders(uid){
+    return firestore.collection(ordersCollection).where('vendors',arrayContains: uid).snapshots();   //arrayContains--> since vendors is list of ids
+  }
+
+
 }
