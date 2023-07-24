@@ -3,6 +3,7 @@ import 'package:e_mart_seller_app/const/const.dart';
 import 'package:e_mart_seller_app/controllers/products_controller.dart';
 import 'package:e_mart_seller_app/services/store_services.dart';
 import 'package:e_mart_seller_app/views/products_screen/add_new_product.dart';
+import 'package:e_mart_seller_app/views/products_screen/edit_product_details.dart';
 import 'package:e_mart_seller_app/views/products_screen/products_details.dart';
 import 'package:e_mart_seller_app/widgets/loading_indicator.dart';
 import 'package:get/get.dart';
@@ -106,7 +107,7 @@ class ProductsScreen extends StatelessWidget {
 
                                       //When user click on edit
                                       if(i==1){
-
+                                          Get.to(()=>EditProductDetails(data: data[index],));
                                       }
 
                                       //when user click on remove

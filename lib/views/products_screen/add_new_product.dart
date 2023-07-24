@@ -31,6 +31,10 @@ class AddNewProduct extends StatelessWidget {
                   await productController.uploadProductImages();
                   await productController.uploadProductDetails(context);
                   productController.isloading(false);
+                  productController.pnameController.clear();
+                  productController.pdescController.clear();
+                  productController.ppriceController.clear();
+                  productController.pquantityController.clear();
                   Get.back();
 
         } , title: "Add Product",textcolor: purpleColor),

@@ -20,6 +20,7 @@ class ChatScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: chatController.sellerName.toString().text.semiBold.color(fontGrey).make(),
       ),
       body: Column(
